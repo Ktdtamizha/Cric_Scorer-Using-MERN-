@@ -7,12 +7,10 @@ export const View = async(req,res) => {
 };
 
 export const ViewDeatil = async(req,res) => {
-    try {
-        const teams = await Team.findById(req.params.id);
-        res.json(teams);
-    } catch (error) {
-        res.status(500).json({message:error.message})
-    }
+    const id = req.params.id;
+    Team.findById(id)
+    .then(teams => res.json(teams))
+    .catch(err => res.json(err))
 };
 
 export const Add = async (req,res) => {
@@ -25,33 +23,29 @@ export const Add = async (req,res) => {
         }
     ) ;
     try {
-        team.save();
+        await team.save();
         res.status(200).json(team);
     } catch (error) {
-        res.status({message:error.message});
+        res.status(500).json({message:error.message});
     }
 };
 
 export const Update = async (req,res) => {
-    try {
-        const team = await Team.findOneAndUpdate({_id: req.params.id},{
+        const id = req.params.id;
+        Team.findByIdAndUpdate(id,{
             team1: req.body.team1,
             team2: req.body.team2,
-            result: req.body.result,
-            summary: req.body.summary
-           },{
-            new : true,
-           });
-            res.status(200).json(team);
-    } catch (error) {
-        res.status(400).json({message:error.message})
-    }
+            result: req.body.result
+           },
+           { new: true })
+           .then(team => res.json(team))
+           .catch((err) => res.json(err));
 };
 
 export const Delete = async (req,res) => {
     const id = req.params.id;
-    Team.findByIdAndDelete({_id:id})
-    .then(res => res.json(res))
+    Team.findByIdAndDelete(id)
+    .then(result => res.json(result))
     .catch(err => res.json(err))
 };
 
