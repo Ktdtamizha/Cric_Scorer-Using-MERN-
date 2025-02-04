@@ -1,11 +1,9 @@
 import express from 'express';
-import { Add,Delete,View,Update,ViewDeatil } from '../Controllers/cric.controllers.js';
+import { Add,Delete,View,Update} from '../Controllers/cric.controllers.js';
 
 const router = express.Router();
 
 router.get('/',View)
-
-router.get('/:id',ViewDeatil)
 
 router.post('/',Add)
 
